@@ -37,7 +37,7 @@ public class Trabajador {
     }
     else
     {
-        System.out.println("Celular invalido");
+        throw new IllegalArgumentException("Celular invalido");
     }
 
     }
@@ -49,7 +49,7 @@ public class Trabajador {
         }
         else
         {
-            System.out.println("Correo invalido");
+            throw new IllegalArgumentException("Correo invalido");
         }
     }
     

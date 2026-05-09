@@ -22,8 +22,23 @@ public class Semana5 {
         t1.setCorreo("trabajador1@gmail.com");
         
         Trabajador t2 = new Trabajador("DNI", "CAS");
-        t2.setCelular("987654321");
-        t2.setCorreo("juan@gmail.com");
+        try
+
+        {
+            t2.setCelular("986783011");
+        }
+        catch(IllegalArgumentException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        try
+        {
+            t2.setCorreo("juan@gmail.com");
+        }
+        catch(IllegalArgumentException e)
+        {
+            System.out.println(e.getMessage());
+        }
       
         control.agregarTrabajador(t1);
         control.agregarTrabajador(t2);
