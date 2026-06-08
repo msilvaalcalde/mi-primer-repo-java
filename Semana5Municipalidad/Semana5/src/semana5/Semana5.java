@@ -25,7 +25,7 @@ public class Semana5 {
         try
 
         {
-            t2.setCelular("986783011");
+            t2.setCelular("98678301");
         }
         catch(IllegalArgumentException e)
         {
