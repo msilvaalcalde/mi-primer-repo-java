@@ -29,6 +29,21 @@ public class ControlTrabajador {
         }
     }
 
+    public String obtenerListadoTrabajadores() {
+        String texto = "";
+
+        if (listaTrabajadores.isEmpty()) {
+            texto = "No hay trabajadores registrados.";
+        } else {
+            for (Trabajador trabajador : listaTrabajadores) {
+                texto += trabajador.mostrarDatos() + "\n";
+                texto += "------------------------------\n";
+            }
+        }
+
+        return texto;
+    }
+
     public Trabajador buscarPorDocumento(String numeroDocumento) {
         for (Trabajador trabajador : listaTrabajadores) {
             if (trabajador.getNumeroDocumento().equals(numeroDocumento)) {
@@ -59,6 +74,26 @@ public class ControlTrabajador {
                     + trabajador.getApellidoPaterno() + " - "
                     + (trabajador.isEstado() ? "Activo" : "Inactivo"));
         }
+    }
+
+    public String obtenerReporteGeneral() {
+        String texto = "";
+
+        texto += "===== REPORTE GENERAL DE TRABAJADORES =====\n";
+        texto += "Total de trabajadores registrados: " + listaTrabajadores.size() + "\n\n";
+
+        if (listaTrabajadores.isEmpty()) {
+            texto += "No hay trabajadores registrados.\n";
+        } else {
+            for (Trabajador trabajador : listaTrabajadores) {
+                texto += trabajador.getCodigoTrabajador() + " - "
+                        + trabajador.getNombres() + " "
+                        + trabajador.getApellidoPaterno() + " - "
+                        + (trabajador.isEstado() ? "Activo" : "Inactivo") + "\n";
+            }
+        }
+
+        return texto;
     }
 
     public void generarReportePorTipo() {
@@ -92,6 +127,43 @@ public class ControlTrabajador {
                 System.out.println("------------------------------");
             }
         }
+    }
+
+    public String obtenerReportePorTipo() {
+        String texto = "";
+
+        texto += "===== REPORTE POR TIPO DE TRABAJADOR =====\n\n";
+
+        if (listaTrabajadores.isEmpty()) {
+            texto += "No hay trabajadores registrados.\n";
+        } else {
+            for (Trabajador trabajador : listaTrabajadores) {
+
+                if (trabajador instanceof EmpleadoMunicipal) {
+                    EmpleadoMunicipal empleado = (EmpleadoMunicipal) trabajador;
+
+                    texto += "Tipo: Empleado Municipal\n";
+                    texto += "Nombre: " + empleado.getNombres() + "\n";
+                    texto += "Sueldo mensual: " + empleado.getSueldoMensual() + "\n";
+                    texto += "Bonificacion: " + empleado.getBonificacion() + "\n";
+                    texto += "Sueldo total: " + empleado.calcularSueldo() + "\n";
+                }
+
+                if (trabajador instanceof ObreroMunicipal) {
+                    ObreroMunicipal obrero = (ObreroMunicipal) trabajador;
+
+                    texto += "Tipo: Obrero Municipal\n";
+                    texto += "Nombre: " + obrero.getNombres() + "\n";
+                    texto += "Jornal diario: " + obrero.getJornalDiario() + "\n";
+                    texto += "Dias trabajados: " + obrero.getDiasTrabajados() + "\n";
+                    texto += "Sueldo total: " + obrero.calcularSueldo() + "\n";
+                }
+
+                texto += "------------------------------\n";
+            }
+        }
+
+        return texto;
     }
 
     public ArrayList<Trabajador> getListaTrabajadores() {

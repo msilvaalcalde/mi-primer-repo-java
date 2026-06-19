@@ -1,1 +1,12 @@
 /mi-primer-repo-java/nbproject/private/
+/Semana5Municipalidad/Semana5/nbproject/private/
+/Semana5Municipalidad/Semana5/build/
+/SistemaPersonalMunicipal/target/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# NetBeans private settings
+nbproject/private/
+**/nbproject/private/
