@@ -1,4 +1,4 @@
-package com.mycompany.sistemapersonalmunicipal;
+package com.mycompany.sistemapersonalmunicipal.model;
 
 public class Asistencia {
 
@@ -10,10 +10,11 @@ public class Asistencia {
     public Asistencia() {
     }
 
-    public Asistencia(String fecha, String horaIngreso) {
+    public Asistencia(String fecha, String horaIngreso, String horaSalida) {
         setFecha(fecha);
         setHoraIngreso(horaIngreso);
-        this.tardanza = calcularTardanza();
+        setHoraSalida(horaSalida);
+        calcularTardanza();
     }
 
     public String getFecha() {
@@ -22,8 +23,11 @@ public class Asistencia {
 
     public void setFecha(String fecha) {
         if (fecha == null || fecha.trim().isEmpty()) {
-            throw new IllegalArgumentException("La fecha no puede estar vacia.");
+            throw new IllegalArgumentException(
+                    "La fecha no puede estar vacía."
+            );
         }
+
         this.fecha = fecha;
     }
 
@@ -33,10 +37,12 @@ public class Asistencia {
 
     public void setHoraIngreso(String horaIngreso) {
         if (horaIngreso == null || horaIngreso.trim().isEmpty()) {
-            throw new IllegalArgumentException("La hora de ingreso no puede estar vacia.");
+            throw new IllegalArgumentException(
+                    "La hora de ingreso no puede estar vacía."
+            );
         }
+
         this.horaIngreso = horaIngreso;
-        this.tardanza = calcularTardanza();
     }
 
     public String getHoraSalida() {
@@ -44,9 +50,6 @@ public class Asistencia {
     }
 
     public void setHoraSalida(String horaSalida) {
-        if (horaSalida == null || horaSalida.trim().isEmpty()) {
-            throw new IllegalArgumentException("La hora de salida no puede estar vacia.");
-        }
         this.horaSalida = horaSalida;
     }
 
@@ -54,24 +57,25 @@ public class Asistencia {
         return tardanza;
     }
 
-    public void setTardanza(boolean tardanza) {
-        this.tardanza = tardanza;
-    }
-
     public boolean calcularTardanza() {
-        if (horaIngreso == null) {
+
+        if (horaIngreso == null || horaIngreso.trim().isEmpty()) {
+            tardanza = false;
             return false;
         }
 
-        return horaIngreso.compareTo("08:00") > 0;
+        tardanza = horaIngreso.compareTo("08:00") > 0;
+
+        return tardanza;
     }
 
     public String mostrarDatos() {
-        String tardanzaTexto = tardanza ? "Si" : "No";
 
         return "Fecha: " + fecha
                 + "\nHora ingreso: " + horaIngreso
-                + "\nHora salida: " + horaSalida
-                + "\nTardanza: " + tardanzaTexto;
+                + "\nHora salida: "
+                + (horaSalida != null ? horaSalida : "Sin registrar")
+                + "\nTardanza: "
+                + (tardanza ? "Sí" : "No");
     }
 }

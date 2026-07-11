@@ -2,7 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.sistemapersonalmunicipal;
+package com.mycompany.sistemapersonalmunicipal.view;
+import com.mycompany.sistemapersonalmunicipal.dao.CargoDAO;
+import com.mycompany.sistemapersonalmunicipal.dao.AreaDAO;
+import com.mycompany.sistemapersonalmunicipal.dao.TrabajadorDAO;
+import com.mycompany.sistemapersonalmunicipal.model.Cargo;
+import com.mycompany.sistemapersonalmunicipal.model.ObreroMunicipal;
+import com.mycompany.sistemapersonalmunicipal.model.EmpleadoMunicipal;
+import com.mycompany.sistemapersonalmunicipal.model.Trabajador;
+import com.mycompany.sistemapersonalmunicipal.model.Area;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +27,9 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
     public FrmRegistrarTrabajador() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        actualizarCamposPago();
+        cargarAreasYCargos();
+        generarCodigoTrabajador();
     }
     private void limpiarCampos() {
 
@@ -39,7 +51,124 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
     cboTipoDocumento.setSelectedIndex(0);
     cboRegimenLaboral.setSelectedIndex(0);
     }
+        private void actualizarCamposPago() {
 
+        String tipo = cboTipoTrabajador.getSelectedItem().toString();
+
+        boolean esEmpleado =
+                tipo.equals("Empleado Municipal");
+
+        // CAMPOS DE EMPLEADO
+        txtSueldoMensual.setEnabled(esEmpleado);
+        txtBonificacion.setEnabled(esEmpleado);
+
+        jLabel15.setEnabled(esEmpleado); // Sueldo mensual
+        jLabel17.setEnabled(esEmpleado); // Bonificación
+
+        // CAMPOS DE OBRERO
+        txtJornalDiario.setEnabled(!esEmpleado);
+        txtDiasTrabajados.setEnabled(!esEmpleado);
+
+        jLabel16.setEnabled(!esEmpleado); // Jornal diario
+        jLabel18.setEnabled(!esEmpleado); // Días trabajados
+
+        // LIMPIAR CAMPOS QUE NO CORRESPONDEN
+        if (esEmpleado) {
+
+            txtJornalDiario.setText("");
+            txtDiasTrabajados.setText("");
+
+        } else {
+
+            txtSueldoMensual.setText("");
+            txtBonificacion.setText("");
+        }
+    }
+        private void cargarAreasYCargos() {
+
+        cboArea.removeAllItems();
+        cboCargo.removeAllItems();
+
+        AreaDAO areaDAO = new AreaDAO();
+
+        java.util.List<Object[]> areas =
+                areaDAO.listarTodas();
+
+        for (Object[] area : areas) {
+
+            cboArea.addItem(
+                    area[1] + " - " + area[2]
+            );
+        }
+
+
+        CargoDAO cargoDAO = new CargoDAO();
+
+        java.util.List<Object[]> cargos =
+                cargoDAO.listarTodos();
+
+        for (Object[] cargo : cargos) {
+
+            cboCargo.addItem(
+                    cargo[1] + " - " + cargo[2]
+            );
+        }
+        cargarCargosSegunTipo();
+    }
+            private void cargarCargosSegunTipo() {
+
+        cboCargo.removeAllItems();
+
+        String tipoTrabajador =
+                cboTipoTrabajador.getSelectedItem().toString();
+
+        CargoDAO cargoDAO = new CargoDAO();
+
+        java.util.List<Object[]> cargos =
+                cargoDAO.listarTodos();
+
+        for (Object[] cargo : cargos) {
+
+            String codigo = cargo[1].toString();
+            String nombre = cargo[2].toString();
+
+            if (tipoTrabajador.equals("Empleado Municipal")) {
+
+                if (!nombre.equalsIgnoreCase("Obrero municipal")) {
+
+                    cboCargo.addItem(
+                            codigo + " - " + nombre
+                    );
+                }
+
+            } else {
+
+                if (nombre.equalsIgnoreCase("Obrero municipal")) {
+
+                    cboCargo.addItem(
+                            codigo + " - " + nombre
+                    );
+                }
+            }
+        }
+    }
+        private void generarCodigoTrabajador() {
+
+      TrabajadorDAO trabajadorDAO =
+              new TrabajadorDAO();
+
+      String tipoTrabajador =
+              cboTipoTrabajador
+                      .getSelectedItem()
+                      .toString();
+
+      String codigo =
+              trabajadorDAO.generarSiguienteCodigo(
+                      tipoTrabajador
+              );
+
+      txtCodigoTrabajador.setText(codigo);
+    }      
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -74,6 +203,10 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
         txtCodigoTrabajador = new javax.swing.JTextField();
         txtFechaIngreso = new javax.swing.JTextField();
         cboRegimenLaboral = new javax.swing.JComboBox<>();
+        jLabel19 = new javax.swing.JLabel();
+        cboArea = new javax.swing.JComboBox<>();
+        jLabel20 = new javax.swing.JLabel();
+        cboCargo = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
@@ -89,7 +222,6 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
         btnCerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(700, 620));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.BELOW_TOP));
 
@@ -193,6 +325,7 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
         );
 
         cboTipoTrabajador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empleado Municipal", "Obrero Municipal" }));
+        cboTipoTrabajador.addActionListener(this::cboTipoTrabajadorActionPerformed);
 
         jLabel3.setText("REGISTRO DE TRABAJADOR MUNICIPAL   ");
 
@@ -204,11 +337,20 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
 
         jLabel13.setText("Régimen laboral:");
 
+        txtCodigoTrabajador.setEditable(false);
         txtCodigoTrabajador.addActionListener(this::txtCodigoTrabajadorActionPerformed);
 
         txtFechaIngreso.addActionListener(this::txtFechaIngresoActionPerformed);
 
         cboRegimenLaboral.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CAS", "276", "728" }));
+
+        jLabel19.setText("Area:");
+
+        cboArea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CAS", "276", "728" }));
+
+        jLabel20.setText("Cargo:");
+
+        cboCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CAS", "276", "728" }));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -219,12 +361,19 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
                     .addComponent(jLabel12)
-                    .addComponent(jLabel13))
+                    .addComponent(jLabel13)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel19))
+                    .addComponent(jLabel20))
                 .addGap(26, 26, 26)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cboRegimenLaboral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigoTrabajador, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                    .addComponent(txtFechaIngreso))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cboCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(cboRegimenLaboral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCodigoTrabajador, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                        .addComponent(txtFechaIngreso)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -242,7 +391,15 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13)
                     .addComponent(cboRegimenLaboral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cboArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel20)
+                    .addComponent(cboCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jLabel14.setText("Tipo trabajador:");
@@ -316,30 +473,29 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(20, 20, 20)
-                            .addComponent(jLabel14)
-                            .addGap(32, 32, 32)
-                            .addComponent(cboTipoTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel14)
+                        .addGap(32, 32, 32)
+                        .addComponent(cboTipoTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(140, 140, 140)
                         .addComponent(btnGuardar)
-                        .addGap(62, 62, 62)
+                        .addGap(59, 59, 59)
                         .addComponent(btnLimpiar)
-                        .addGap(71, 71, 71)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCerrar)))
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addContainerGap(147, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
@@ -357,15 +513,15 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnLimpiar)
                     .addComponent(btnCerrar))
-                .addGap(16, 16, 16))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -375,14 +531,14 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(20, 20, 20))
+                .addContainerGap())
         );
 
         pack();
@@ -397,7 +553,174 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
         try {
 
         String tipoTrabajador = cboTipoTrabajador.getSelectedItem().toString();
+                // ================= VALIDACIONES EN ORDEN =================
 
+        // 1. NÚMERO DE DOCUMENTO
+
+        if (txtNumeroDocumento.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe ingresar el número de documento."
+            );
+
+            txtNumeroDocumento.requestFocus();
+
+            return;
+        }
+
+
+        // VALIDAR DNI
+
+        if (cboTipoDocumento.getSelectedItem().toString().equals("DNI")
+                && !txtNumeroDocumento.getText().trim().matches("\\d{8}")) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "El DNI debe contener exactamente 8 dígitos numéricos."
+            );
+
+            txtNumeroDocumento.requestFocus();
+
+            return;
+        }
+
+
+        // 2. NOMBRES
+
+        if (txtNombres.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe ingresar los nombres."
+            );
+
+            txtNombres.requestFocus();
+
+            return;
+        }
+
+
+        // 3. APELLIDO PATERNO
+
+        if (txtApellidoPaterno.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe ingresar el apellido paterno."
+            );
+
+            txtApellidoPaterno.requestFocus();
+
+            return;
+        }
+
+
+        // 4. APELLIDO MATERNO
+
+        if (txtApellidoMaterno.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe ingresar el apellido materno."
+            );
+
+            txtApellidoMaterno.requestFocus();
+
+            return;
+        }
+
+
+        // 5. CELULAR
+
+        if (txtCelular.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe ingresar el número de celular."
+            );
+
+            txtCelular.requestFocus();
+
+            return;
+        }
+
+
+        // VALIDAR QUE EL CELULAR TENGA 9 NÚMEROS
+
+        if (!txtCelular.getText().trim().matches("\\d{9}")) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "El celular debe contener exactamente 9 dígitos numéricos."
+            );
+
+            txtCelular.requestFocus();
+
+            return;
+        }
+
+
+        // 6. CORREO
+
+        if (txtCorreo.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe ingresar el correo electrónico."
+            );
+
+            txtCorreo.requestFocus();
+
+            return;
+        }
+
+
+        // VALIDAR FORMATO DEL CORREO
+
+        if (!txtCorreo.getText().trim().matches(
+                "^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,}$"
+        )) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Ingrese un correo electrónico válido."
+            );
+
+            txtCorreo.requestFocus();
+
+            return;
+        }
+
+
+        // 7. CÓDIGO DEL TRABAJADOR
+
+        if (txtCodigoTrabajador.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe ingresar el código del trabajador."
+            );
+
+            txtCodigoTrabajador.requestFocus();
+
+            return;
+        }
+
+
+        // 8. FECHA DE INGRESO
+
+        if (txtFechaIngreso.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe ingresar la fecha de ingreso."
+            );
+
+            txtFechaIngreso.requestFocus();
+
+            return;
+        }
         Trabajador trabajador;
 
         if (tipoTrabajador.equals("Empleado Municipal")) {
@@ -450,7 +773,7 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
 
         trabajador.setApellidoPaterno(txtApellidoPaterno.getText());
 
-        trabajador.setApellidoMaterno(txtCelular.getText());
+        trabajador.setApellidoMaterno(txtApellidoMaterno.getText());
 
         trabajador.setCelular(txtCelular.getText());
 
@@ -462,21 +785,76 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
 
         trabajador.setRegimenLaboral(cboRegimenLaboral.getSelectedItem().toString());
 
-        Area area = new Area("A001", "Recursos Humanos");
+        String seleccionArea =
+                cboArea.getSelectedItem().toString();
 
-        Cargo cargo = new Cargo("C001", "Asistente administrativo");
+        String seleccionCargo =
+                cboCargo.getSelectedItem().toString();
 
-        Contrato contrato = new Contrato("CT001", trabajador.getFechaIngreso(), "2026-12-31");
+
+        // Separar código y nombre del área
+        String[] partesArea =
+                seleccionArea.split(" - ", 2);
+
+        String codigoArea =
+                partesArea[0];
+
+        String nombreArea =
+                partesArea[1];
+
+
+        // Separar código y nombre del cargo
+        String[] partesCargo =
+                seleccionCargo.split(" - ", 2);
+
+        String codigoCargo =
+                partesCargo[0];
+
+        String nombreCargo =
+                partesCargo[1];
+
+
+        Area area =
+                new Area(
+                        codigoArea,
+                        nombreArea
+                );
+
+        Cargo cargo =
+                new Cargo(
+                        codigoCargo,
+                        nombreCargo
+                );
+
+        //Contrato contrato = new Contrato("CT001", trabajador.getFechaIngreso(), "2026-12-31");
 
         trabajador.setArea(area);
 
         trabajador.setCargo(cargo);
 
-        trabajador.setContrato(contrato);
+        //trabajador.setContrato(contrato);
 
-        DatosSistema.control.agregarTrabajador(trabajador);
+        TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
 
-        javax.swing.JOptionPane.showMessageDialog(this, "Trabajador registrado correctamente.");
+        boolean registradoBD = trabajadorDAO.insertar(trabajador);
+
+        if (registradoBD) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Trabajador registrado correctamente en la base de datos."
+            );
+
+        } else {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se pudo registrar el trabajador.\n"
+                    + "Verifique que el documento y el código no estén duplicados.",
+                    "Error de registro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
 
         limpiarCampos();
         } catch (NumberFormatException e) {
@@ -538,6 +916,13 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
          dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
+    private void cboTipoTrabajadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTipoTrabajadorActionPerformed
+        // TODO add your handling code here:
+        actualizarCamposPago();
+        cargarCargosSegunTipo();
+        generarCodigoTrabajador();
+    }//GEN-LAST:event_cboTipoTrabajadorActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -567,6 +952,8 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JComboBox<String> cboArea;
+    private javax.swing.JComboBox<String> cboCargo;
     private javax.swing.JComboBox<String> cboRegimenLaboral;
     private javax.swing.JComboBox<String> cboTipoDocumento;
     private javax.swing.JComboBox<String> cboTipoTrabajador;
@@ -579,6 +966,8 @@ public class FrmRegistrarTrabajador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

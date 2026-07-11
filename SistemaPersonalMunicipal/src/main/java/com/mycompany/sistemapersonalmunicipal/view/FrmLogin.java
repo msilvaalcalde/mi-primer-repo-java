@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.sistemapersonalmunicipal;
+package com.mycompany.sistemapersonalmunicipal.view;
+import com.mycompany.sistemapersonalmunicipal.dao.UsuarioDAO;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -128,26 +130,29 @@ public class FrmLogin extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
-        String usuario = txtUsuario.getText();
+    String usuario = txtUsuario.getText().trim();
+    String contrasena =
+        new String(txtContrasena.getPassword());
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
+    if (usuarioDAO.validarLogin(usuario, contrasena)) {
+        
+        JOptionPane.showMessageDialog(
+            this,
+            "Bienvenido al sistema."
+        );
+        
+        FrmMenuPrincipal menu =
+            new FrmMenuPrincipal();
+        
+        menu.setVisible(true);
+        this.dispose();
+    } else {
 
-        String contrasena = new String(txtContrasena.getPassword());
+        JOptionPane.showMessageDialog(
+            this,
+            "Usuario o contraseña incorrectos."
 
-        if (usuario.equals("admin") && contrasena.equals("1234")) {
-
-             javax.swing.JOptionPane.showMessageDialog(this, "Bienvenido al sistema.");
-
-            FrmMenuPrincipal menu = new FrmMenuPrincipal();
-
-            menu.setLocationRelativeTo(null);
-
-            menu.setVisible(true);
-
-            dispose();
-
-        } else {
-
-            javax.swing.JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
-            txtContrasena.setText("");
+        );
 
         }
     }//GEN-LAST:event_btnIngresarActionPerformed

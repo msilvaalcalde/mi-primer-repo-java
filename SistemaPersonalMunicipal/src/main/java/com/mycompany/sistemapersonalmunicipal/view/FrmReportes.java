@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.sistemapersonalmunicipal;
+package com.mycompany.sistemapersonalmunicipal.view;
+
+import com.mycompany.sistemapersonalmunicipal.dao.ReporteDAO;
 
 /**
  *
@@ -135,12 +137,18 @@ public class FrmReportes extends javax.swing.JFrame {
 
     private void btnReporteGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteGeneralActionPerformed
         // TODO add your handling code here:
-         txtAreaReporte.setText(DatosSistema.control.obtenerReporteGeneral());
+         ReporteDAO reporteDAO = new ReporteDAO();
+        txtAreaReporte.setText(
+                reporteDAO.obtenerReporteGeneral()
+        );
     }//GEN-LAST:event_btnReporteGeneralActionPerformed
 
     private void btnReportePorTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportePorTipoActionPerformed
         // TODO add your handling code here:
-        txtAreaReporte.setText(DatosSistema.control.obtenerReportePorTipo());
+        ReporteDAO reporteDAO = new ReporteDAO();
+        txtAreaReporte.setText(
+                reporteDAO.obtenerReportePorTipo()
+        );
     }//GEN-LAST:event_btnReportePorTipoActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed

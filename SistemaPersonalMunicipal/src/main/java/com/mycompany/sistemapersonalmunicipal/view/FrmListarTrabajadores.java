@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.sistemapersonalmunicipal;
+package com.mycompany.sistemapersonalmunicipal.view;
+
+import com.mycompany.sistemapersonalmunicipal.dao.TrabajadorDAO;
 
 /**
  *
@@ -158,42 +160,271 @@ public class FrmListarTrabajadores extends javax.swing.JFrame {
 
     private void btnListarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarTodosActionPerformed
         // TODO add your handling code here:
-        txtAreaListado.setText(DatosSistema.control.obtenerListadoTrabajadores());
+        TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
+
+        java.util.List<Object[]> lista = trabajadorDAO.listarTodos();
+
+        if (lista.isEmpty()) {
+
+            txtAreaListado.setText(
+
+                    "No hay trabajadores registrados en la base de datos."
+
+            );
+
+            return;
+
+        }
+
+        StringBuilder texto = new StringBuilder();
+
+        texto.append("LISTADO DE TRABAJADORES\n");
+
+        texto.append("============================================\n\n");
+
+        for (Object[] fila : lista) {
+
+            texto.append("ID: ")
+
+                    .append(fila[0])
+
+                    .append("\n");
+
+            texto.append("Código: ")
+
+                    .append(fila[1])
+
+                    .append("\n");
+
+            texto.append("Documento: ")
+
+                    .append(fila[2])
+
+                    .append("\n");
+
+            texto.append("Nombre: ")
+
+                    .append(fila[3])
+
+                    .append("\n");
+
+            texto.append("Tipo: ")
+
+                    .append(fila[4])
+
+                    .append("\n");
+
+            texto.append("Área: ")
+
+                    .append(fila[5])
+
+                    .append("\n");
+
+            texto.append("Cargo: ")
+
+                    .append(fila[6])
+
+                    .append("\n");
+
+            texto.append("Sueldo calculado: S/ ")
+
+                    .append(fila[7])
+
+                    .append("\n");
+
+            texto.append("--------------------------------------------\n\n");
+
+        }
+
+        txtAreaListado.setText(texto.toString());   
     }//GEN-LAST:event_btnListarTodosActionPerformed
 
     private void btnBuscarDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDocumentoActionPerformed
         // TODO add your handling code here:
-        String documento = txtBuscarDocumento.getText();
+        String documento = txtBuscarDocumento.getText().trim();
 
-         Trabajador trabajador = DatosSistema.control.buscarPorDocumento(documento);
+        if (documento.isEmpty()) {
 
-        if (trabajador == null) {
+            txtAreaListado.setText(
 
-             txtAreaListado.setText("No se encontró trabajador con ese documento.");
+                    "Ingrese un número de documento."
+
+            );
+
+            return;
+
+        }
+
+        TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
+
+        Object[] fila =
+
+                trabajadorDAO.buscarPorDocumento(documento);
+
+        if (fila == null) {
+
+            txtAreaListado.setText(
+
+                    "No se encontró trabajador con ese documento."
+
+            );
 
         } else {
 
-            txtAreaListado.setText(trabajador.mostrarDatos());
+            StringBuilder texto = new StringBuilder();
+
+            texto.append("TRABAJADOR ENCONTRADO\n");
+
+            texto.append("============================================\n\n");
+
+            texto.append("ID: ")
+
+                    .append(fila[0])
+
+                    .append("\n");
+
+            texto.append("Código: ")
+
+                    .append(fila[1])
+
+                    .append("\n");
+
+            texto.append("Documento: ")
+
+                    .append(fila[2])
+
+                    .append("\n");
+
+            texto.append("Nombre: ")
+
+                    .append(fila[3])
+
+                    .append("\n");
+
+            texto.append("Tipo: ")
+
+                    .append(fila[4])
+
+                    .append("\n");
+
+            texto.append("Área: ")
+
+                    .append(fila[5])
+
+                    .append("\n");
+
+            texto.append("Cargo: ")
+
+                    .append(fila[6])
+
+                    .append("\n");
+
+            texto.append("Sueldo calculado: S/ ")
+
+                    .append(fila[7])
+
+                    .append("\n");
+
+            txtAreaListado.setText(texto.toString());
 
         }
     }//GEN-LAST:event_btnBuscarDocumentoActionPerformed
 
     private void btnBuscarNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarNombreActionPerformed
         // TODO add your handling code here:
-        String nombre = txtBuscarNombre.getText();
+        String nombre = txtBuscarNombre.getText().trim();
 
-        Trabajador trabajador = DatosSistema.control.buscarPorNombre(nombre);
+       if (nombre.isEmpty()) {
 
-        if (trabajador == null) {
+           txtAreaListado.setText(
 
-        txtAreaListado.setText("No se encontró trabajador con ese nombre.");
+                   "Ingrese un nombre o apellido para buscar."
 
-        } else {
+           );
 
-            txtAreaListado.setText(trabajador.mostrarDatos());
+           return;
 
-        }
-        
+       }
+
+       TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
+
+       java.util.List<Object[]> lista =
+
+               trabajadorDAO.buscarPorNombre(nombre);
+
+       if (lista.isEmpty()) {
+
+           txtAreaListado.setText(
+
+                   "No se encontraron trabajadores con ese nombre."
+
+           );
+
+           return;
+
+       }
+
+       StringBuilder texto = new StringBuilder();
+
+       texto.append("RESULTADOS DE BÚSQUEDA\n");
+
+       texto.append("============================================\n\n");
+
+       for (Object[] fila : lista) {
+
+           texto.append("ID: ")
+
+                   .append(fila[0])
+
+                   .append("\n");
+
+           texto.append("Código: ")
+
+                   .append(fila[1])
+
+                   .append("\n");
+
+           texto.append("Documento: ")
+
+                   .append(fila[2])
+
+                   .append("\n");
+
+           texto.append("Nombre: ")
+
+                   .append(fila[3])
+
+                   .append("\n");
+
+           texto.append("Tipo: ")
+
+                   .append(fila[4])
+
+                   .append("\n");
+
+           texto.append("Área: ")
+
+                   .append(fila[5])
+
+                   .append("\n");
+
+           texto.append("Cargo: ")
+
+                   .append(fila[6])
+
+                   .append("\n");
+
+           texto.append("Sueldo calculado: S/ ")
+
+                   .append(fila[7])
+
+                   .append("\n");
+
+           texto.append("--------------------------------------------\n\n");
+
+       }
+
+       txtAreaListado.setText(texto.toString());
     }//GEN-LAST:event_btnBuscarNombreActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed

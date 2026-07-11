@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.sistemapersonalmunicipal;
+package com.mycompany.sistemapersonalmunicipal.view;
 
 /**
  *
@@ -36,6 +36,10 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         btnRegistrar = new javax.swing.JButton();
         btnReportes = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnAreas = new javax.swing.JButton();
+        btnContratos = new javax.swing.JButton();
+        btnAsistencias = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
 
@@ -87,37 +91,72 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         btnSalir.setText("Salir");
         btnSalir.addActionListener(this::btnSalirActionPerformed);
 
+        btnModificar.setText("Modificar trabajador");
+        btnModificar.addActionListener(this::btnModificarActionPerformed);
+
+        btnAreas.setText("Gestión de áreas");
+        btnAreas.addActionListener(this::btnAreasActionPerformed);
+
+        btnContratos.setText("Gestión de contratos");
+        btnContratos.addActionListener(this::btnContratosActionPerformed);
+
+        btnAsistencias.setText("Registro de asistencias");
+        btnAsistencias.addActionListener(this::btnAsistenciasActionPerformed);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(170, 170, 170)
+                .addGap(81, 81, 81)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSalir)
-                    .addComponent(btnListar)
-                    .addComponent(btnRegistrar)
-                    .addComponent(btnReportes))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnReportes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSalir)
+                        .addGap(32, 32, 32))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnRegistrar)
+                            .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnContratos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(45, 45, 45)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnListar)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(btnAsistencias, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAreas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRegistrar)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegistrar)
+                    .addComponent(btnListar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnListar)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAreas)
+                    .addComponent(btnModificar))
                 .addGap(18, 18, 18)
-                .addComponent(btnReportes)
-                .addGap(18, 18, 18)
-                .addComponent(btnSalir)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnContratos)
+                    .addComponent(btnAsistencias))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(btnSalir))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReportes)))
                 .addGap(30, 30, 30))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 15)); // NOI18N
-        jLabel3.setText("Avance T3 - Técnicas de Programación Orientada a Objetos");
+        jLabel3.setText("Proyecto Final - Técnicas de Programación Orientada a Objetos");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -189,6 +228,44 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+            FrmModificarTrabajador ventana =
+                    new FrmModificarTrabajador();
+
+            ventana.setLocationRelativeTo(null);
+            ventana.setVisible(true);
+        
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnAreasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAreasActionPerformed
+        // TODO add your handling code here:     
+            FrmGestionAreas ventana =
+                    new FrmGestionAreas();
+
+            ventana.setLocationRelativeTo(null);
+            ventana.setVisible(true);
+        
+    }//GEN-LAST:event_btnAreasActionPerformed
+
+    private void btnContratosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContratosActionPerformed
+        // TODO add your handling code here:
+        FrmGestionContratos ventana =
+                new FrmGestionContratos();
+
+        ventana.setLocationRelativeTo(null);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_btnContratosActionPerformed
+
+    private void btnAsistenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsistenciasActionPerformed
+        // TODO add your handling code here:
+        FrmAsistencias ventana =
+                new FrmAsistencias();
+
+        ventana.setLocationRelativeTo(null);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_btnAsistenciasActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -215,7 +292,11 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAreas;
+    private javax.swing.JButton btnAsistencias;
+    private javax.swing.JButton btnContratos;
     private javax.swing.JButton btnListar;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnReportes;
     private javax.swing.JButton btnSalir;

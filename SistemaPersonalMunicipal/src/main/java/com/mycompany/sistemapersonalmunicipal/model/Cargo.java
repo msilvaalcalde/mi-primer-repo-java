@@ -1,4 +1,4 @@
-package com.mycompany.sistemapersonalmunicipal;
+package com.mycompany.sistemapersonalmunicipal.model;
 
 public class Cargo {
 

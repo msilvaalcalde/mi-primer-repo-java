@@ -1,4 +1,6 @@
-package com.mycompany.sistemapersonalmunicipal;
+package com.mycompany.sistemapersonalmunicipal.model;
+
+import com.mycompany.sistemapersonalmunicipal.model.Trabajador;
 
 public class EmpleadoMunicipal extends Trabajador {
 
